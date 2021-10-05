@@ -36,7 +36,7 @@ module.exports = {
       {
         test: /\.s?css$/,
         use: [  // 순서는 아래에서 위로
-          'vue-style-loader',
+          // 'vue-style-loader',  // 오류가 생겨서 잠시 주석처리
           'style-loader', // 해석된 내용을 삽입하는 용도
           'css-loader',  // js에서 css파일을 해석하는 용도
           'postcss-loader', // 공급업체 접두사 적용
