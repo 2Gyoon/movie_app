@@ -1,13 +1,13 @@
 import axios from 'axios'
 import _uniqBy from 'lodash/uniqBy'
 
-export default{
+export default {
   // namespaced :  module화 되어있음을 명시적으로 표현
   namespaced: true,
   // state : data와 같음
-  state: () => ({ 
+  state: () => ({
     movies: [],
-    message: '',
+    message: 'Search for the movie title!',
     loading: false
   }),
   // getters :  computed와 같음
@@ -21,19 +21,26 @@ export default{
   // mutations : methods와 같음
   // 변이, 다른 컴포넌트에서는 데이터를 수정하는 것이 허용되지 않음(getters, actions 등..)
   mutations: {
-    updateState(state, payload){
+    updateState(state, payload) {
       Object.keys(payload).forEach(key => {
         state[key] = payload[key]
       })
     },
-    resetMovies(state){
+    resetMovies(state) {
       state.movies = []
     }
   },
   // 비동기
   actions: {
-    async searchMovies({ state, commit }, payload){
-      try{
+    async searchMovies({ state, commit }, payload) {
+      if (state.loading) {
+        return
+      }
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
+      try {
         // Search movies...
         const res = await _fetchMovie({
           ...payload,
@@ -49,9 +56,9 @@ export default{
         const total = parseInt(totalResults, 10)
         const pageLength = Math.ceil(total / 10)
         // 추가 요청!
-        if(pageLength > 1){
-          for(let page = 2; page <= pageLength; page++){
-            if(page > (payload.number / 10)) break
+        if (pageLength > 1) {
+          for (let page = 2; page <= pageLength; page++) {
+            if (page > (payload.number / 10)) break
             const res = await _fetchMovie({
               ...payload,
               page: page
@@ -59,37 +66,41 @@ export default{
             const { Search } = res.data
             commit('updateState', {
               movies: [
-                ...state.movies, 
+                ...state.movies,
                 ..._uniqBy(Search, 'imdbID')
               ]
             })
           }
         }
-      }catch(message){
+      } catch (message) {
         commit('updateState', {
           movies: [],
           message: message
+        })
+      } finally {
+        commit('updateState', {
+          loading: false
         })
       }
     }
   }
 }
 
-function _fetchMovie(payload){
+function _fetchMovie(payload) {
   const { title, type, year, page } = payload
   const OMDB_API_KEY = '7035c60c'
   const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=${page}`
 
   return new Promise((resolve, reject) => {
     axios.get(url)
-    .then((res) => {
-      if(res.data.Error){
-        reject(res.data.Error)
-      }
-      resolve(res)
-    })
-    .catch((err) => {
-      reject(err.message)
-    })
+      .then((res) => {
+        if (res.data.Error) {
+          reject(res.data.Error)
+        }
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err.message)
+      })
   })
 }
