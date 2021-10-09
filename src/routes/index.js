@@ -15,7 +15,7 @@ export default createRouter({
       component: Home // 메인 페이지로 이동했을 때 어떤 vue.js의 컴포넌트를 사용할지 명시
     },
     {
-      path: '/movie',
+      path: '/movie/:id',
       component: Movie
     },
     {
