@@ -40,7 +40,12 @@ module.exports = {
           'style-loader', // 해석된 내용을 삽입하는 용도
           'css-loader',  // js에서 css파일을 해석하는 용도
           'postcss-loader', // 공급업체 접두사 적용
-          'sass-loader' // 가장 먼저 해석됨
+          {
+            loader: 'sass-loader', // 가장 먼저 해석됨
+            options: {
+              additionalData: '@import "~/scss/main";'
+            }
+          }
         ]
       },
       {

@@ -1,5 +1,5 @@
 <template>
-  <div class="movie" :style="{ backgroundImage: `url(${movie.Poster})` }">
+  <RouterLink :to="`/movie/${movie.imdbID}`" class="movie" :style="{ backgroundImage: `url(${movie.Poster})` }">
     <Loader
       v-if="imageLoading"
       :size=1.5
@@ -12,7 +12,7 @@
         {{ movie.Title }}
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <script>
@@ -51,7 +51,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/scss/main.scss";
 
 .movie{
   $width: 200px;
