@@ -76,24 +76,25 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Loader from "~/components/Loader";
 export default {
   components: {
     Loader,
   },
   computed: {
-    theMovie() {
-      return this.$store.state.movie.theMovie;
-    },
-    loading() {
-      return this.$store.state.movie.loading;
-    },
+    ...mapState('movie', [
+      'theMovie',
+      'loading'
+    ])
   },
   created() {
     // console.log(this.$route);
     this.$store.dispatch('movie/searchMovieWithId', {
       // movie/tt123456 -> tt123456 = params.id
       id: this.$route.params.id
+      // $route : 페이지 정보를 가지는 객체, 정보 조회용(속성이 있음)
+      // $router : 페이지 조작을 위한 객체(메소드가 있음)
     })
   },
   methods: {

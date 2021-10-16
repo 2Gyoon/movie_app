@@ -8,6 +8,9 @@ export default createRouter({
   // Hash(특정 페이지에서 새로 고침을 했을 때 페이지를 찾을 수 없다는 메세지 방지가능)
   // https://google.com/#/search/
   history: createWebHashHistory(),
+  scrollBehavior(){
+    return { top: 0 }
+  },
   // pages
   routes: [
     {

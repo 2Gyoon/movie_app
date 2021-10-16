@@ -42,7 +42,7 @@ export default {
       if (state.loading) {
         return
       }
-      commit('updateState', {
+      commit('updateState', { // commit - mutations를 가져올 수 있음 / dispatch - actions를 가져올 수 있음(하나의 action에서 다른 action을 실행)
         message: '',
         loading: true
       })
